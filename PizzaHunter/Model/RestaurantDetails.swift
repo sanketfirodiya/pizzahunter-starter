@@ -38,3 +38,7 @@ struct RestaurantDetails: Codable {
   let photos: [String]
   let location: Location
 }
+
+struct Location: Codable {
+  let displayAddress: [String]
+}

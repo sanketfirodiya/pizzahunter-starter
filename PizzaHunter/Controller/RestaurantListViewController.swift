@@ -34,31 +34,33 @@ class RestaurantListViewController: UIViewController {
 
   @IBOutlet weak var tableView: UITableView!
 
-  private var restaurants: [Restaurant] = [] {
-    didSet {
-      tableView.reloadData()
-    }
-  }
+  private var restaurants: [[String: Any]] = [[:]]
 
   var currentLocation: String!
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
     currentLocation = RestaurantListViewController.locations.first!
-
     tableView.register(RestaurantListTableViewCell.nib, forCellReuseIdentifier: "RestaurantListTableViewCell")
   }
 }
 
 // MARK: - UITableViewDataSource
-extension RestaurantListViewController: UITableViewDataSource {
+extension RestaurantListViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return restaurants.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "RestaurantListTableViewCell", for: indexPath) as! RestaurantListTableViewCell
+
+    guard indexPath.row <= restaurants.count else {
+      return cell
+    }
+
+    let restaurant = restaurants[indexPath.row]
+    cell.nameLabel.text = restaurant["name"] as? String
+    cell.iconImageView.imageURL = restaurant["image_url"] as? String
     return cell
   }
 
@@ -71,20 +73,6 @@ extension RestaurantListViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 50
-  }
-}
-
-// MARK: - UITableViewDelegate
-extension RestaurantListViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard indexPath.row <= restaurants.count else {
-      return
-    }
-
-    let detailsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RestaurantDetailsViewController") as! RestaurantDetailsViewController
-    detailsViewController.restaurantId = restaurants[indexPath.row].id
-    navigationController?.pushViewController(detailsViewController, animated: true)
-    tableView.deselectRow(at: indexPath, animated: true)
   }
 }
 

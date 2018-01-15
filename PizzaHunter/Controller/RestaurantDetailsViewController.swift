@@ -28,6 +28,7 @@
 
 import UIKit
 import Cosmos
+import Siesta
 
 class RestaurantDetailsViewController: UIViewController {
   @IBOutlet weak var nameLabel: UILabel!
@@ -36,9 +37,9 @@ class RestaurantDetailsViewController: UIViewController {
   @IBOutlet weak var priceLabel: UILabel!
   @IBOutlet weak var phoneLabel: UILabel!
   @IBOutlet weak var addressLabel: UILabel!
-  @IBOutlet weak var imageView1: UIImageView!
-  @IBOutlet weak var imageView2: UIImageView!
-  @IBOutlet weak var imageView3: UIImageView!
+  @IBOutlet weak var imageView1: RemoteImageView!
+  @IBOutlet weak var imageView2: RemoteImageView!
+  @IBOutlet weak var imageView3: RemoteImageView!
 
   var restaurantId: String!
   private var restaurantDetail: RestaurantDetails? {
@@ -51,11 +52,27 @@ class RestaurantDetailsViewController: UIViewController {
         priceLabel.text = restaurant.price
         phoneLabel.text = restaurant.displayPhone
         addressLabel.text = restaurant.location.displayAddress.joined(separator: "\n")
+        if restaurant.photos.count > 0 {
+          imageView1.imageURL = restaurant.photos[0]
+        }
+        if restaurant.photos.count > 1 {
+          imageView2.imageURL = restaurant.photos[1]
+        }
+        if restaurant.photos.count > 2 {
+          imageView3.imageURL = restaurant.photos[2]
+        }
       }
     }
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
+  }
+}
+
+// MARK: - ResourceObserver
+extension RestaurantDetailsViewController: ResourceObserver {
+  func resourceChanged(_ resource: Resource, event: ResourceEvent) {
+    restaurantDetail = resource.typedContent() ?? nil
   }
 }
