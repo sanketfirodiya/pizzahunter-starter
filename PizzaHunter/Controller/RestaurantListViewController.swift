@@ -52,7 +52,8 @@ extension RestaurantListViewController: UITableViewDataSource {
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "RestaurantListTableViewCell", for: indexPath) as! RestaurantListTableViewCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: "RestaurantListTableViewCell",
+                                             for: indexPath) as! RestaurantListTableViewCell
 
     guard indexPath.row <= restaurants.count else {
       return cell
