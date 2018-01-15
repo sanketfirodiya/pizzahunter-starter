@@ -46,7 +46,7 @@ class RestaurantListViewController: UIViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension RestaurantListViewController: UITableViewDataSource, UITableViewDelegate {
+extension RestaurantListViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return restaurants.count
   }
@@ -63,7 +63,9 @@ extension RestaurantListViewController: UITableViewDataSource, UITableViewDelega
     cell.iconImageView.imageURL = restaurant["image_url"] as? String
     return cell
   }
+}
 
+extension RestaurantListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let headerView = RestaurantListTableViewHeader()
     headerView.delegate = self
